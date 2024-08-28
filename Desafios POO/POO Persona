@@ -1,0 +1,61 @@
+class Persona:
+    def __init__(self, nombre="", edad=0, dni=""):
+        self._nombre = nombre
+        self._edad = edad
+        self._dni = dni
+
+    @property
+    def nombre(self):
+        return self._nombre
+
+    @nombre.setter
+    def nombre(self, valor):
+        if isinstance(valor, str):
+            self._nombre = valor
+        else:
+            raise ValueError("El nombre debe ser una cadena de caracteres.")
+
+    @property
+    def edad(self):
+        return self._edad
+
+    @edad.setter
+    def edad(self, valor):
+        if isinstance(valor, int) and valor >= 0:
+            self._edad = valor
+        else:
+            raise ValueError("La edad debe ser un número entero positivo.")
+
+    @property
+    def dni(self):
+        return self._dni
+
+    @dni.setter
+    def dni(self, valor):
+        if isinstance(valor, str) and valor.isdigit():
+            self._dni = valor
+        else:
+            raise ValueError("El DNI debe ser una cadena de dígitos.")
+
+    def mostrar(self):
+        print(f"Nombre: {self._nombre}")
+        print(f"Edad: {self._edad}")
+        print(f"DNI: {self._dni}")
+
+    def esMayorDeEdad(self):
+        return self._edad >= 18
+
+
+"""Consola"""
+if __name__ == "__main__":
+    nombre = input("Ingrese el nombre: ")
+    edad = int(input("Ingrese la edad: "))
+    dni = input("Ingrese el DNI: ")
+
+    persona = Persona(nombre, edad, dni)
+    persona.mostrar()
+
+    if persona.esMayorDeEdad():
+        print("La persona es mayor de edad.")
+    else:
+        print("La persona es menor de edad.")
