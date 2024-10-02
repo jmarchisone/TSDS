@@ -14,19 +14,28 @@ db_config = {
 
 @app.route("/data", methods=["POST"])
 def insert_data():
-    data = request.json
-    campo1 = data["campo1"]
+    if request.is_json:
+        data = request.get_json()
+        campo1 = data.get("campo1")
 
-    try:
-        conn = mysql.connector.connect(**db_config)
-        cursor = conn.cursor()
-        cursor.execute("INSERT INTO capacidad_esp32 (capacidad) VALUES (%s)", (campo1))
-        conn.commit()
-        cursor.close()
-        conn.close()
-        return jsonify({"status": "success"}), 201
-    except mysql.connector.Error as err:
-        return jsonify({"status": "error", "message": str(err)}), 500
+        if campo1 is None:
+            return jsonify({"status": "error", "message": "campo1 is required"}), 400
+
+        # Aquí va tu lógica para insertar en la base de datos
+        try:
+            conn = mysql.connector.connect(**db_config)
+            cursor = conn.cursor()
+            cursor.execute(
+                "INSERT INTO capacidad_esp32 (capacidad) VALUES (%s)", (campo1,)
+            )
+            conn.commit()
+            cursor.close()
+            conn.close()
+            return jsonify({"status": "success"}), 201
+        except mysql.connector.Error as err:
+            return jsonify({"status": "error", "message": str(err)}), 500
+    else:
+        return jsonify({"status": "error", "message": "Request must be JSON"}), 400
 
 
 app.run(host="0.0.0.0", port=5000)
