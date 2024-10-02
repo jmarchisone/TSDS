@@ -27,3 +27,6 @@ def insert_data():
         return jsonify({"status": "success"}), 201
     except mysql.connector.Error as err:
         return jsonify({"status": "error", "message": str(err)}), 500
+
+
+app.run(host="0.0.0.0", port=5000)
